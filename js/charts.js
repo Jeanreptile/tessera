@@ -11,6 +11,7 @@
  *   * stacked_area_chart
  *   * donut_chart
  *   * process_series
+ *   * bar_chart
  */
 ds.charts =
   (function () {
@@ -64,6 +65,13 @@ ds.charts =
       return get_renderer('donut_chart', item)(element, item, query)
     }
 
+    self.bar_chart = function(element, item, query) {
+      return get_renderer('bar_chart', item)(element, item, query)
+    }
+    
+    self.discrete_bar_chart = function(element, item, query) {
+      return get_renderer('discrete_bar_chart', item)(element, item, query)
+    }
     /**
      * Convert the JSON data series returned from Graphite into the
      * format used by the current chart provider.

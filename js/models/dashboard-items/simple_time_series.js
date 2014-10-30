@@ -34,6 +34,16 @@ ds.register_dashboard_item('simple_time_series', {
     } else {
       ds.charts.simple_line_chart($('#' + item.item_id + ' .ds-graph-holder'), item, query)
     }
+    if (query.data[0].summation.max > item.threshold_critical) {
+      item.set_css_class("alert alert-danger")
+    }
+    else if (query.data[0].summation.max > item.threshold_warning) {
+      item.set_css_class("alert alert-warning")
+    }
+    else {
+      item.set_css_class("")
+    }
+
   },
 
   template: ds.templates.models.simple_time_series,

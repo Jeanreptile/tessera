@@ -8,12 +8,18 @@ ds.models.chart =
     function extend(builder) {
       Object.defineProperty(builder.target, 'is_chart', {value: true})
       return builder.property('title')
+                    .property('threshold_critical')
+                    .property('threshold_warning')
+                    .property('targetlink')
                     .property('options', { init: {} })
     }
 
     function init(target, data) {
       if (data) {
         target.title = data.title
+        target.threshold_critical = data.threshold_critical
+        target.threshold_warning = data.threshold_warning
+        target.targetlink = data.targetlink
         target.options = data.options || {}
         if (data.options.y1) {
           target.options.y1 = ds.models.Axis(data.options.y1)
@@ -32,6 +38,12 @@ ds.models.chart =
       data = data || {}
       if (target.title)
         data.title = target.title
+      if (target.targetlink)
+        data.targetlink = target.targetlink
+      if (target.threshold_critical)
+        data.threshold_critical = target.threshold_critical
+      if (target.threshold_warning)
+        data.threshold_warning = target.threshold_warning
       if (target.options) {
         data.options = ds.extend(target.options)
         if (target.options.y1) {
@@ -60,6 +72,9 @@ ds.models.chart =
  */
 ds.models.chart.interactive_properties = [
   'title',
+  'targetlink',
+  {id:'threshold_critical', type:'number'},
+  {id:'threshold_warning', type:'number'},
   {
     id: 'chart.y-axis-label',
     name: 'y-axis-label',

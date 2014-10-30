@@ -276,6 +276,36 @@ ds.charts.flot =
       render_legend(item, query, flot_options)
       return self
     }
+    
+    self.bar_chart = function(e, item, query) {
+      var options = item.options || {}
+      var context = {
+          plot: null
+      }
+      var legend_id = '#ds-legend-' + item.item_id
+      var palette = ds.charts.util.get_palette(options.palette)
+      var flot_options = ds.extend(get_default_options(), {
+        colors: palette,
+        legend: {
+          container: legend_id,
+          labelBoxBorderColor: 'transparent',
+          show: true,
+          noColumns: 4
+        },
+        series: {
+          lines: { show: true, lineWidth: 1, fill: 1},
+          stack: true,
+          points: { show: false },
+          bars: { show: false }
+        }
+      })
+
+      setup_plugins(e, context)
+      context.plot = $.plot($(e), query.chart_data('flot'), flot_options)
+
+      render_legend(item, query, palette, flot_options)
+      return self
+    }
 
     self.donut_chart = function(e, item, query) {
       ds.charts.nvd3.donut_chart(e, item, query)

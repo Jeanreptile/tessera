@@ -150,6 +150,76 @@ ds.charts.graphite =
         return png_url.href()
     }
 
+    self.bar_chart = function(element, item, query) {
+var url = self.bar_chart_url(item, {
+        height: element.height(),
+        width: element.width()
+      })
+      img(element, url)
+    }
+
+    self.bar_chart_url = function(item, opt) {
+        var options = ds.extend(opt || {}, item.options, ds.charts.util.get_colors())
+        var png_url = URI(item.query.url())
+            .setQuery('format', options.format || 'png')
+            .setQuery('height', options.height || 600)
+            .setQuery('width', options.width || 1200)
+            .setQuery('bgcolor', options.bgcolor || self.DEFAULT_BGCOLOR)
+            .setQuery('fgcolor', options.fgcolor || 'black')
+            .setQuery('majorGridLineColor', options.majorGridLineColor || '#dddddd')
+            .setQuery('minorGridLineColor', options.minorGridLineColor || '#eeeeee')
+            .setQuery('hideLegend', options.hideLegend || 'false')
+            .setQuery('hideAxes', options.hideAxes || 'false')
+            .setQuery('colorList', ds.charts.util.get_palette(options.palette).join())
+            .setQuery('vtitle', options.y1 ? options.y1.label : options.yAxisLabel)
+            .setQuery('title', options.showTitle ? item.title : '')
+
+        if (!item.query.is_stacked())
+            png_url.setQuery('areaMode', 'stacked')
+
+        if (options.y1 && options.y1.min)
+            png_url.setQuery('yMin', options.y1.min )
+        if (options.y1 && options.y1.max)
+            png_url.setQuery('yMax', options.y1.max )
+
+        return png_url.href()
+    }
+    
+    self.discrete_bar_chart = function(element, item, query) {
+	var url = self.discrete_bar_chart_url(item, {
+        height: element.height(),
+        width: element.width()
+      })
+      img(element, url)
+    }
+
+    self.discrete_bar_chart_url = function(item, opt) {
+        var options = ds.extend(opt || {}, item.options, ds.charts.util.get_colors())
+        var png_url = URI(item.query.url())
+            .setQuery('format', options.format || 'png')
+            .setQuery('height', options.height || 600)
+            .setQuery('width', options.width || 1200)
+            .setQuery('bgcolor', options.bgcolor || self.DEFAULT_BGCOLOR)
+            .setQuery('fgcolor', options.fgcolor || 'black')
+            .setQuery('majorGridLineColor', options.majorGridLineColor || '#dddddd')
+            .setQuery('minorGridLineColor', options.minorGridLineColor || '#eeeeee')
+            .setQuery('hideLegend', options.hideLegend || 'false')
+            .setQuery('hideAxes', options.hideAxes || 'false')
+            .setQuery('colorList', ds.charts.util.get_palette(options.palette).join())
+            .setQuery('vtitle', options.y1 ? options.y1.label : options.yAxisLabel)
+            .setQuery('title', options.showTitle ? item.title : '')
+
+        if (!item.query.is_stacked())
+            png_url.setQuery('areaMode', 'stacked')
+
+        if (options.y1 && options.y1.min)
+            png_url.setQuery('yMin', options.y1.min )
+        if (options.y1 && options.y1.max)
+            png_url.setQuery('yMax', options.y1.max )
+
+        return png_url.href()
+    }
+
     self.donut_chart_url = function(item, opt) {
       var png_url = URI(self.standard_line_chart_url(item, opt))
             .setQuery('graphType', 'pie')
@@ -178,6 +248,10 @@ ds.charts.graphite =
         case 'singlegraph':
             return self.simple_area_chart_url(item, options)
         case 'donut_chart':
+            return self.donut_chart_url(item, options)
+        case 'bar_chart':
+            return self.bar_chart_url(item, options)
+        case 'discrete_bar_chart':
             return self.donut_chart_url(item, options)
         }
         return undefined

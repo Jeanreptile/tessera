@@ -90,7 +90,7 @@
       ds.templates.edit['dashboard-query-row'](query)
     )
     if (updated_items && (updated_items.length > 0)) {
-      for (var i = 0; i < updated_items.length; i++) {
+      for (var i in updated_items) {
         ds.manager.update_item_view(updated_items[i])
       }
     }
@@ -169,7 +169,7 @@
       if (item_type.interactive_properties) {
         // Run the edit handlers for each property, which make them
         // editable and set up the callbacks for their updates
-        for (var i = 0; i < item_type.interactive_properties.length; i++) {
+        for (var i in item_type.interactive_properties) {
           item_type.interactive_properties[i].edit(item)
         }
       }
@@ -324,9 +324,7 @@
 
     if (data.areaMode && data.areaMode === 'stacked') {
       type = 'stacked_area_chart'
-    } else if (data.graphType && data.graphType === 'pie') {
-      type = 'donut_chart'
-    }
+}
 
     var chart = ds.models.make(type)
                   .set_query(query.name)
@@ -351,8 +349,6 @@
     name: 'new-chart-from-url',
     display: 'Add new chart from Graphite URL',
     icon: 'fa fa-image',
-    class: 'new-item',
-    category: 'new-item-chart',
     handler: function(action, container) {
       bootbox.prompt("Enter a Graphite chart URL", function(result) {
         if (result) {

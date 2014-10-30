@@ -352,7 +352,6 @@ ds.manager =
             } else if (window_url.hasQuery('interactive', 'false')) {
                 setting = true
             }
-
             dashboard_url.setQuery('interactive', setting)
             window_url.setQuery('interactive', setting)
             self.current.url = dashboard_url.href()

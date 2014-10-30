@@ -14,6 +14,7 @@ ds.charts.nvd3 =
     self.simple_line_chart = function(e, item, query) {
       var options = item.options || {}
       var data = [query.chart_data('nvd3')[0]]
+
         nv.addGraph(function() {
             var width = e.width()
             var height = e.height()
@@ -37,6 +38,34 @@ ds.charts.nvd3 =
                 .attr('height', height)
                 .datum(data)
                 .call(chart)
+
+    	    $(e.selector + ' svg').on('click', function(e){
+       		var elem = $(e.target), currentItem, currentUrl;
+		myUrl = data[0].target;
+		if (myUrl.charAt(0) == 'k')
+		{ 
+		  myUrl = myUrl.substring(14);
+		  myUrl = myUrl.substring(0, myUrl.length - 1);
+		}
+            	currentItem2 = e.target.getAttribute('class').match(/\d+/)[0];
+		dp = data[0].values[ currentItem2 ] + '';
+		var timestamp = dp.split(',')[1];
+		$.getJSON(ds.config.GRAPHITE_URL + '/events/get_data?data=' + myUrl + '&last=' + timestamp,{
+          	format: "json"
+        	}).done(function(data){
+                if (item.targetlink){
+                  var target = item.targetlink
+                }
+                else{
+                  var target = ds.config.DATAPOINT_LINK
+                }
+
+          	var link = '' + target + data[0].tags + '/';
+		window.location.href=link;});  
+            })
+            
+            nv.utils.windowResize(chart.update);
+
             return chart
         })
     }
@@ -154,6 +183,78 @@ ds.charts.nvd3 =
             return chart
         })
     }
+    
+    self.bar_chart = function(e, item, query) {
+        var options = item.options || {}
+        var showLegend = options.showLegend !== false
+        var data = query.chart_data('nvd3')
+        if (data.length > self.DEFAULT_AUTO_HIDE_LEGEND_THRESHOLD) {
+            showLegend = false
+        }
+	nv.addGraph(function() {
+            var width  = e.width()
+            var height = e.height()
+   	    var chart = nv.models.multiBarChart()
+                .options({
+                    showLegend: showLegend,
+                    useInteractiveGuideline: options.useInteractiveGuideline !== false,
+                    showXAxis: false,
+                    showYAxis: false,
+                    x: function(d) { return d[1] },
+                    y: function(d) { return d[0] }
+                })
+                .width(width)
+                .height(height)
+
+       chart.xAxis
+        .tickFormat(d3.format(',f'))
+
+       chart.yAxis
+        .tickFormat(d3.format(',.1f'))
+
+       d3.select(e.selector + ' svg')
+                .attr('width', width)
+                .attr('height', height)
+                .datum(data)
+                .transition()
+                .call(chart)
+
+    return chart
+    })
+    }
+
+    self.discrete_bar_chart = function(e, item, query) {
+        var options = item.options || {}
+        var showLegend = options.showLegend !== false
+        var data = query.chart_data('nvd3')
+        if (data.length > self.DEFAULT_AUTO_HIDE_LEGEND_THRESHOLD) {
+            showLegend = false
+        }
+	nv.addGraph(function() {
+            var width  = e.width()
+            var height = e.height()
+   	    var chart = nv.models.discreteBarChart()
+                .options({
+                    showLegend: showLegend,
+                    useInteractiveGuideline: options.useInteractiveGuideline !== false,
+                    showXAxis: false,
+                    showYAxis: options.showYAxis !== false,
+                    x: function(d) { return d[1] },
+                    y: function(d) { return d[0] }
+                })
+                .width(width)
+                .height(height)
+
+       d3.select(e.selector + ' svg')
+                .attr('width', width)
+                .attr('height', height)
+                .datum(data)
+                .transition()
+                .call(chart)
+
+    return chart
+    })
+    }
 
     self.donut_chart = function(e, item, query) {
       var options = item.options || {}
@@ -182,7 +283,7 @@ ds.charts.nvd3 =
                 .color(ds.charts.util._color_function(options.palette || ds.charts.DEFAULT_PALETTE))
                 .labelType(options.labelType || "percent")
                 .donut(options.donut !== false)
-                .donutRatio(options.donutRatio || 0.3)
+                .donutRatio(options.donutRatio || 0.5)
                 .showLabels(options.showLabels !== false)
                 .donutLabelsOutside(options.donutLabelsOutside !== false)
                 .width(width)
@@ -198,10 +299,22 @@ ds.charts.nvd3 =
         })
     }
 
+
     self.process_series = function(series) {
       var result = {}
       if (series.summation) {
         result.summation = series.summation
+      }
+      function removeEmptyArrayElements(arr) { 
+        if (Array.isArray(arr)) {
+	var newarr = arr;
+	for (var i = 0; i < newarr.length; i++) {
+	if (newarr[i][0] == null) {
+          newarr.splice(i, 1);
+          i--;
+          }
+          }
+        }
       }
       result.key = series.target
       result.values = series.datapoints

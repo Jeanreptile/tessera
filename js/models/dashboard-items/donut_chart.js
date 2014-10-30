@@ -27,6 +27,7 @@ ds.register_dashboard_item('donut_chart', {
     ds.charts.donut_chart($("#" + item.item_id + ' .ds-graph-holder'), item, query)
   },
 
+
   template: ds.templates.models.donut_chart,
 
   interactive_properties: ds.models.chart.interactive_properties
