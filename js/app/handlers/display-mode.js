@@ -3,6 +3,7 @@ ds.app.add_mode_handler('display', {
     /* Make sure the fullscreen range indicator is correct */
     var range       = ds.context()
     var description = ds.manager.getRangeDescription(range.from);
+    $('div[id="actionbutton"]').hide();
     if ( description ) {
       $("a.ds-fullscreen-range-indicator").text(description);
     }
@@ -20,5 +21,6 @@ ds.app.add_mode_handler('display', {
   exit: function() {
     $('.ds-header-container').removeClass('container-fluid')
     $('.ds-header-container').addClass('container')
+    $('div[id="actionbutton"]').show();
   }
 })
