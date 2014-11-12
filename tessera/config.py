@@ -11,7 +11,7 @@ SERVER_ADDRESS             = '0.0.0.0'
 SERVER_PORT                = 5000
 INTERACTIVE_CHARTS_DEFAULT = True
 INTERACTIVE_CHARTS_RENDERER= 'nvd3'
-DATAPOINT_LINK		   = 'http://perfs.digitas.fr/result/' 
+DATAPOINT_LINK		   = 'http://www.webpagetest.org/result/' 
 
 DASHBOARD_RANGE_PICKER = [
       ('Past Hour',   '-1h'),
