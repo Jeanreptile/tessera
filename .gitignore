@@ -19,3 +19,4 @@ experimental/
 js/demo/
 tmp/
 etc/
+tessera/config.py

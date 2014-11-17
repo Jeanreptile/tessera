@@ -1,17 +1,17 @@
 DEBUG                      = True
-SECRET_KEY                 = 'REPLACE ME'
+SECRET_KEY                 = 'SECRET_KEY_TO_CHANGE'
 DEFAULT_FROM_TIME          = '-3h'
 DEFAULT_THEME              = 'light'
 DASHBOARD_APPNAME          = 'Tessera'
 SQLALCHEMY_DATABASE_URI    = 'sqlite:///tessera.db'
-GRAPHITE_URL               = 'http://10.226.200.9:80'
+GRAPHITE_URL               = 'http://GRAPHITE_IP_TO_ADD:GRAPHITE_PORT_TO_CHANGE'
 MIGRATION_DIR              = 'migrations'
 DISPLAY_TIMEZONE           = 'Etc/UTC'
 SERVER_ADDRESS             = '0.0.0.0'
 SERVER_PORT                = 5000
 INTERACTIVE_CHARTS_DEFAULT = True
 INTERACTIVE_CHARTS_RENDERER= 'nvd3'
-DATAPOINT_LINK		   = 'http://www.webpagetest.org/result/' 
+DATAPOINT_LINK		   = 'http://DATAPOINT_URL_DEFAULT_TOCHANGE/' 
 
 DASHBOARD_RANGE_PICKER = [
       ('Past Hour',   '-1h'),
